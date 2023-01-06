@@ -28,6 +28,10 @@ class Transform(object):
 		dataset.transform = self.transforms
 		return dataset
 
+class CreateLoss(object):
+	def __init__(self):
+		self.loss = torch.nn.MSELoss
+
 if __name__ == "__main__":
 
 	#Basic tests
@@ -50,6 +54,22 @@ if __name__ == "__main__":
 		except:
 			print("ERROR: Transformation not successful")
 
+	def test_loss():
+		x = torch.Tensor([1,1,1])
+		x.requires_grad = True
+		y = torch.Tensor([1,1,1])
+		loss = CreateLoss().loss()
+
+		try:
+			loss = CreateLoss().loss()
+			output = loss(x,y)
+			assert(output.item() == 0)
+			print("Loss works and is backpropable")
+		except:
+			print("ERROR in loss function")
+
+
+
 
 
 	from argparse import ArgumentParser
@@ -59,6 +79,8 @@ if __name__ == "__main__":
 						help="Test to see if the dataset loads")
 	parser.add_argument("--test_transform", action='store_true',
 						help="Test to see if the dataset is transformed to a tensor")
+	parser.add_argument("--test_loss", action='store_true',
+						help="Test to see if the the loss is working as intended")
 
 	args = parser.parse_args()
 
@@ -66,6 +88,10 @@ if __name__ == "__main__":
 		load_test()
 	if args.test_transform:
 		test_transform()
+	if args.test_loss:
+		test_loss()
+
+
 
 
 
