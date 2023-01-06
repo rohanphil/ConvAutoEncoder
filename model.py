@@ -59,12 +59,12 @@ class Decoder(nn.Module):
 			nn.ConvTranspose2d(8,1,3,stride = 2, padding = 1, output_padding = 1)
 			)
 
-		def forward(self, x):
-			x = self.decoder_lin(x)
-			x = self.unflatten(x)
-			x = self.decoder_conv(x)
-			x = torch.sigmoid(x)
-			return x
+	def forward(self, x):
+		x = self.linear_dec(x)
+		x = self.unflatten(x)
+		x = self.decoder_conv(x)
+		x = torch.sigmoid(x)
+		return x
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd 
 import torchvision
 from torchvision import transforms
-from torch.utils.data import DataLoader, random_split
+from torch.utils.data import DataLoader, random_split, Dataset
 
 
 
@@ -31,6 +31,11 @@ class Transform(object):
 class CreateLoss(object):
 	def __init__(self):
 		self.loss = torch.nn.MSELoss
+
+class get_device(object):
+
+	def __init__(self):
+		self.device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
 if __name__ == "__main__":
 

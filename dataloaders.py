@@ -1,7 +1,7 @@
 import numpy as np 
 import torch
 import torchvision 
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader,Dataset
 from utils import *
 
 class dataloader(object):
@@ -25,6 +25,7 @@ if __name__ == "__main__":
 		try:
 			train_loader = dataloader(batch_size = 10).create_loader(train)
 			assert(train_loader != [])
+			print(train_loader)
 			print("DataLoader created!!")
 		except:
 			print("Failed to create DataLoader. :(")
