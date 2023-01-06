@@ -1,2 +1,3 @@
-This is the first init of the ConvAutoEncoder Repository
+Convoultional AutoEncoders using Pytorch, with a Basic classifier to validate performance
+
 
