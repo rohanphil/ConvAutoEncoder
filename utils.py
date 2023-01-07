@@ -32,6 +32,17 @@ class CreateLoss(object):
 	def __init__(self):
 		self.loss = torch.nn.MSELoss
 
+# class save(object):
+# 	def __init__(self, path, model):
+# 		torch.save(model, path)
+
+# class load(object):
+# 	def __init__(self):
+# 		self.model = None
+
+# 	def load(self,path):
+# 		self.model = torch.load(path)
+
 class get_device(object):
 
 	def __init__(self):
@@ -72,6 +83,8 @@ if __name__ == "__main__":
 			print("Loss works and is backpropable")
 		except:
 			print("ERROR in loss function")
+
+
 
 
 
