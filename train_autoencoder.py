@@ -26,19 +26,58 @@ def train_epoch(encoder, decoder, device, dataloader,loss, opt):
 	return np.mean(train_loss)
 
 
-def train_ae(encoder, decoder, train_set, batch_size, optim, device, loss, num_epochs, save_model = False):
+def test_epoch(encoder,decoder, device, dataloader, loss):
+	
+	encoder.eval()
+	decoder.eval()
+
+	with torch.no_grad():
+
+		output = []
+		label = []
+
+		for label_image,_ in dataloader:
+
+			images = label_image.to(device)
+			encode = encoder(images)
+			decode = decoder(encode)
+			output.append(decode.cpu())
+			label.append(images.cpu())
+
+		output = torch.cat(output)
+		label = torch.cat(label)
+
+		l = loss(output,label)
+
+	return l.data
+
+
+def train_ae(encoder, decoder, train_set, batch_size, optim, device, loss, num_epochs, save_model = False, test = False, test_set = None):
 	train_loader = dataloader(batch_size = batch_size).create_loader(train_set)
 	train_loss_track = []
+	test_loss_track = []
+	if test:
+		try:
+			assert(test_set != None)
+			test_loader = dataloader(batch_size = batch_size).create_loader(test_set)
+		except:
+			print("Please Specify test set")
 	for i in range(num_epochs):
 		train_loss = train_epoch(encoder,decoder,device, train_loader, loss, optim)
 		train_loss_track.append(train_loss)
 		print(f"training loss at {i} epoch = {train_loss}")
+		if test:
+			test_l = test_epoch(encoder,decoder,device, test_loader,loss)
+			test_loss_track.append(test_l.item())
+			print(f"test loss at {i} epoch = {test_l}")
 	if save_model:
 		torch.save(encoder,"encoder.pt")
 		torch.save(decoder,"decoder.pt")
 		torch.save(train_loss_track,"train_loss.pt")
+		if test:
+			torch.save(test_loss_track, "test_loss.pt")
 
-	return (encoder,decoder, train_loss_track)
+	return (encoder,decoder, train_loss_track) if not test else (encoder,decoder,train_loss_track, test_loss_track)
 
 
 
